@@ -1,77 +1,49 @@
-### Review of Last Response and Identified Improvements
-
-After analyzing the previous README response, I identified several areas where clarity, structure, and completeness could be improved. Below are the changes made, along with the reasoning and the rewritten response.
-
----
-
-### **Changes Made and Reasoning**
-
-#### **1. Improved Section Order**
-- **Issue**: The README jumped between sections (e.g., prerequisites before customization prompts). This could confuse users.
-- **Change**: Reorganized sections to follow a logical flow: Overview → Prerequisites → Usage → Features → Customization → Troubleshooting → Security → License.
-
-#### **2. Enhanced Customization Prompt Guidance**
-- **Issue**: The previous explanation of prompts was clear but lacked examples and advice for advanced scenarios (e.g., choosing a domain or managing secrets).
-- **Change**: Added examples and tips for responding to prompts, including how to manage secrets securely.
-
-#### **3. Expanded Troubleshooting Section**
-- **Issue**: Troubleshooting lacked specifics for common Docker and OpenSSL issues.
-- **Change**: Added detailed steps for resolving Docker, OpenSSL, and SSL-related issues, as well as links to official documentation for further support.
-
-#### **4. Security Recommendations**
-- **Issue**: The security section provided general advice but could benefit from more actionable guidance, especially for production use.
-- **Change**: Expanded recommendations to include using environment variable managers and storing backups securely.
-
-#### **5. Added Table of Example Outputs**
-- **Issue**: The README lacked a preview of the generated files and folder structure, which could help users understand the script's output.
-- **Change**: Added a section showing the project folder structure and example outputs.
-
----
-
-### **Rewritten README**
-
-```markdown
 # PhotoPrism and Portainer Setup Script
 
-This repository provides a complete script for setting up the PhotoPrism stack, which includes:
-- **PhotoPrism**: A powerful photo management application.
-- **MariaDB**: A database to store PhotoPrism data.
+This repository provides a comprehensive script to set up the PhotoPrism stack, including:
+
+- **PhotoPrism**: A photo management platform.
+- **MariaDB**: A relational database to store PhotoPrism data.
 - **Nginx**: A reverse proxy with automatically generated self-signed SSL certificates.
-- **Portainer** (optional): A user-friendly Docker container management interface.
-- **Backup Automation**: Automates backups for the MariaDB database with configurable retention.
+- **Portainer** (optional): A web-based Docker container management tool.
+- **Backup and Restore Scripts**: Automates MariaDB backups and provides a restoration script.
 
 The script is designed to work seamlessly on **Linux**, **macOS**, and **Windows** (via Docker Desktop and Git Bash).
 
 ---
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Prerequisites](#prerequisites)
 3. [Usage Instructions](#usage-instructions)
 4. [Features](#features)
 5. [Customization Prompts](#customization-prompts)
 6. [Generated Outputs](#generated-outputs)
-7. [Troubleshooting](#troubleshooting)
-8. [Security Considerations](#security-considerations)
-9. [License](#license)
-10. [Contributing](#contributing)
+7. [Backup and Restore Instructions](#backup-and-restore-instructions)
+8. [Troubleshooting](#troubleshooting)
+9. [Security Considerations](#security-considerations)
+10. [Recommendations for Advanced Users](#recommendations-for-advanced-users)
+11. [Testing Status](#testing-status)
+12. [License](#license)
+13. [Contributing](#contributing)
 
 ---
 
 ## Overview
 
-This script automates the deployment of a PhotoPrism stack. It sets up all required components, including MariaDB, Nginx, SSL certificates, and optional Portainer. The script is interactive and allows full customization based on user inputs.
+This script automates the deployment of a PhotoPrism stack, ensuring that all required components are configured and ready to use. The setup includes automated SSL certificate generation, Docker Compose configuration, and an optional Portainer installation. It also provides database backup and restoration scripts to secure and recover your data.
 
 ---
 
 ## Prerequisites
 
-Ensure the following software is installed:
+Before running the script, ensure the following software is installed:
 
 1. **Docker**: Required to run containers.
    - **Linux**: Install using your package manager (e.g., `sudo apt install docker.io`).
    - **macOS**: Install using Homebrew (`brew install --cask docker`).
-   - **Windows**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+   - **Windows**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop) and ensure it is running.
 
 2. **Docker Compose**: Required for orchestrating containers.
    - **Linux**: Install using `sudo apt install docker-compose`.
@@ -89,8 +61,8 @@ Ensure the following software is installed:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/photoprism-setup.git
-cd photoprism-setup
+git clone https://github.com/mmacri/PhotoPrismCustomizedSetup.git
+cd PhotoPrismCustomizedSetup
 ```
 
 ### Step 2: Run the Setup Script
@@ -101,12 +73,15 @@ bash setup_photoprism_public.sh
 
 ### Step 3: Follow the Prompts
 
-The script will prompt you for:
-- **Docker network name**: Default is `photoprism_network`.
-- **Paths for storage and originals**: Provide full paths to existing directories.
-- **Admin credentials**: Specify username and password for PhotoPrism.
-- **Local IP or domain**: Used for Nginx and SSL generation.
-- **Portainer inclusion**: Choose whether to include Portainer in the setup.
+The script will prompt you to:
+
+1. Specify a Docker network name.
+2. Enter paths for storage and originals.
+3. Provide admin credentials for PhotoPrism.
+4. Enter a local IP or domain for SSL and Nginx configuration.
+5. Choose whether to include Portainer.
+
+Answer each prompt based on your environment and preferences.
 
 ---
 
@@ -119,8 +94,9 @@ The script will prompt you for:
 2. **Dynamic Docker Compose Configuration**:
    - Automatically creates a `docker-compose.yml` file tailored to your inputs.
 
-3. **Backup Automation**:
-   - A script (`backup_photoprism.sh`) automates MariaDB backups with a default retention of 7 days.
+3. **Backup and Restore Scripts**:
+   - Automates MariaDB backups with a default retention of 7 days.
+   - Includes a `restore_photoprism.sh` script to restore the database.
 
 4. **Cross-Platform Support**:
    - Works seamlessly on Linux, macOS, and Windows (via Git Bash).
@@ -144,7 +120,7 @@ The script will prompt you for:
 After running the script, the following structure is created:
 
 ```
-photoprism-setup/
+PhotoPrismCustomizedSetup/
 ├── config/
 │   ├── photoprism.env
 │   ├── ssl/
@@ -152,23 +128,52 @@ photoprism-setup/
 │       ├── photoprism.key
 │       ├── openssl-san.cnf
 ├── scripts/
-│   └── backup_photoprism.sh
+│   ├── backup_photoprism.sh
+│   ├── restore_photoprism.sh
 ├── docker-compose.yml
 ├── setup_photoprism_public.sh
-└── setup_photoprism.log
+├── setup_photoprism.log
 ```
 
 ### Key Files
 - **`docker-compose.yml`**: Defines Docker services.
-- **`photoprism.env`**: Environment variables for PhotoPrism.
+- **`photoprism.env`**: Contains environment variables for PhotoPrism.
 - **`ssl/`**: Contains SSL certificates.
-- **`backup_photoprism.sh`**: Automates MariaDB backups.
+- **`backup_photoprism.sh`**: Automates database backups.
+- **`restore_photoprism.sh`**: Automates database restoration.
+
+---
+
+## Backup and Restore Instructions
+
+### Backup Instructions
+- The script `scripts/backup_photoprism.sh` automates backups for the MariaDB database.
+- Backups are stored in the `backups/` directory and retained for 7 days by default.
+
+To schedule automated backups:
+- **Linux/macOS**: Use `cron` to schedule the script.
+  ```bash
+  crontab -e
+  ```
+  Add the following line to run the backup daily at midnight:
+  ```
+  0 0 * * * /path/to/scripts/backup_photoprism.sh
+  ```
+- **Windows**: Use Task Scheduler to run the script periodically.
+
+### Restore Instructions
+- Use the `restore_photoprism.sh` script to restore the database from a backup file:
+  ```bash
+  bash scripts/restore_photoprism.sh <backup-file.sql>
+  ```
+- **Important**: Ensure the target database is not in use during restoration.
 
 ---
 
 ## Troubleshooting
 
 ### Common Issues
+
 1. **Docker Not Running**:
    - Ensure Docker Desktop or the Docker service is running before executing the script.
 
@@ -181,6 +186,10 @@ photoprism-setup/
 4. **Portainer Not Accessible**:
    - Verify that Docker is exposing Portainer on port `9000`.
 
+### Viewing Logs
+
+Logs for the script are saved in `setup_photoprism.log`. Review this file for detailed error messages.
+
 ---
 
 ## Security Considerations
@@ -189,10 +198,37 @@ photoprism-setup/
    - Update the default MariaDB password in `photoprism.env`.
 
 2. **Secure Secrets**:
-   - Avoid storing secrets directly in `.env`. Use a secret manager for production.
+   - Avoid storing secrets directly in `.env`. Use a secret manager for production setups.
 
 3. **SSL Certificates**:
    - Self-signed certificates are suitable for internal use. Use a trusted CA for production environments.
+
+---
+
+## Recommendations for Advanced Users
+
+1. **Scaling and Load Balancing**:
+   - Use external database services like Amazon RDS or Google Cloud SQL for scalability.
+   - Configure Nginx as a load balancer for multiple PhotoPrism instances.
+
+2. **Production Secrets Management**:
+   - Use tools like HashiCorp Vault or AWS Secrets Manager to store sensitive credentials.
+
+3. **Custom SSL Certificates**:
+   - Replace self-signed certificates with Let’s Encrypt or other CA-provided certificates by placing them in the `config/ssl` directory.
+
+4. **Firewall and Port Security**:
+   - Restrict access to sensitive ports using firewall rules or Docker network policies.
+
+---
+
+## Testing Status
+
+This script has been tested on the following platforms:
+
+- **Linux**: Ubuntu 20.04 with Docker 20.10.
+- **macOS**: macOS Monterey with Docker Desktop 4.5.
+- **Windows**: Windows 11 Pro with Docker Desktop 4.5 and Git Bash.
 
 ---
 
@@ -204,14 +240,5 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Contributing
 
-Contributions are welcome! Submit issues or pull requests on [GitHub](https://github.com/your-repo/photoprism-setup).
-```
+We welcome contributions! Please refer to `CONTRIBUTING.md` for detailed guidelines on how to contribute to this project.
 
----
-
-### **Summary of Changes**
-1. Improved structure and order for logical flow.
-2. Expanded troubleshooting and customization guidance.
-3. Added examples for customization prompts.
-4. Detailed project outputs and folder structure.
-5. Enhanced security recommendations.
